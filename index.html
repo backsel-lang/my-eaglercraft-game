@@ -86,8 +86,45 @@
 
 <script>
 
-function login() {
+async function login() {
 
+let username = document.getElementById("username").value;
+let password = document.getElementById("password").value;
+
+const message = document.getElementById("message");
+const playButton = document.getElementById("playButton");
+
+message.innerText = "Logging in...";
+playButton.style.display = "none";
+
+try {
+
+const response = await fetch(
+"https://script.google.com/a/macros/hendricks.k12.in.us/s/AKfycbyju-zC47qXL7hmgPYTmdBrSx6V5JnB6KAVAzUf5DjBhZ7-053x__EQeTDIXvurSSHu/exec",
+{
+method: "POST",
+body: JSON.stringify({
+action: "login",
+username: username,
+password: password
+})
+}
+);
+
+const result = await response.json();
+
+message.innerText = result.message;
+
+if (result.success) {
+playButton.style.display = "inline-block";
+}
+
+} catch (error) {
+
+message.innerText = "Could not connect to the account server.";
+
+}
+}
  let username = document.getElementById("username").value;
  let password = document.getElementById("password").value;
 
