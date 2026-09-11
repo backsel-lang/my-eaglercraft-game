@@ -37,6 +37,7 @@
  margin: 8px;
  border-radius: 6px;
  border: none;
+ box-sizing: border-box;
  }
 
  button {
@@ -60,7 +61,7 @@
 
 <body>
 
-<div class="screen">
+ <div class="screen">
  <div class="box">
 
  <h1>MY GAME</h1>
@@ -82,122 +83,36 @@
  <p id="message"></p>
 
  </div>
-</div>
+ </div>
 
-<script>
+ <script>
 
-const APPS_SCRIPT_URL =
-"https://script.google.com/a/macros/hendricks.k12.in.us/s/AKfycbyju-zC47qXL7hmgPYTmdBrSx6V5JnB6KAVAzUf5DjBhZ7-053x__EQeTDIXvurSSHu/exec";
+ const APPS_SCRIPT_URL =
+ "https://script.google.com/a/macros/hendricks.k12.in.us/s/AKfycbyju-zC47qXL7hmgPYTmdBrSx6V5JnB6KAVAzUf5DjBhZ7-053x__EQeTDIXvurSSHu/exec";
 
-function login() {
+ function login() {
 
-const username =
-document.getElementById("username").value.trim();
+ const message =
+ document.getElementById("message");
 
-const password =
-document.getElementById("password").value;
+ const playButton =
+ document.getElementById("playButton");
 
-const message =
-document.getElementById("message");
+ message.innerText =
+ "Opening account login...";
 
-const playButton =
-document.getElementById("playButton");
+ playButton.style.display = "none";
 
-if (!username || !password) {
-message.innerText = "Enter your username and password.";
-return;
-}
+ window.location.href = APPS_SCRIPT_URL;
+ }
 
-message.innerText = "Logging in...";
-playButton.style.display = "none";
+ function playGame() {
 
-const frameName = "loginFrame_" + Date.now();
+ alert("Login worked! We will connect Eaglercraft next.");
 
-const iframe = document.createElement("iframe");
-iframe.name = frameName;
-iframe.style.display = "none";
+ }
 
-document.body.appendChild(iframe);
-
-const form = document.createElement("form");
-
-form.method = "POST";
-form.action = APPS_SCRIPT_URL;
-form.target = frameName;
-form.style.display = "none";
-
-const input = document.createElement("input");
-
-input.type = "hidden";
-input.name = "data";
-
-input.value = JSON.stringify({
-action: "login",
-username: username,
-password: password
-});
-
-form.appendChild(input);
-document.body.appendChild(form);
-
-let finished = false;
-
-function handleMessage(event) {
-
-if (finished) return;
-
-if (!event.data ||
-typeof event.data.success !== "boolean") {
-return;
-}
-
-finished = true;
-
-message.innerText = event.data.message;
-
-if (event.data.success) {
-playButton.style.display = "inline-block";
-}
-
-window.removeEventListener("message", handleMessage);
-
-form.remove();
-iframe.remove();
-}
-
-window.addEventListener("message", handleMessage);
-
-form.submit();
-
-setTimeout(function() {
-
-if (!finished) {
-
-finished = true;
-
-message.innerText =
-"The account server did not respond.";
-
-window.removeEventListener(
-"message",
-handleMessage
-);
-
-form.remove();
-iframe.remove();
-}
-
-}, 10000);
-}
-
-
-function playGame() {
-
-// We will connect Eaglercraft here later.
-
-}
-
-</script>
+ </script>
 
 </body>
 </html>
