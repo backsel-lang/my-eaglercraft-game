@@ -125,26 +125,6 @@ message.innerText = "Could not connect to the account server.";
 
 }
 }
- let username = document.getElementById("username").value;
- let password = document.getElementById("password").value;
-
- // Temporary test account
- if (username === "test" && password === "1234") {
-
- document.getElementById("message").innerText =
- "Login successful!";
-
- document.getElementById("playButton").style.display =
- "inline-block";
-
- } else {
-
- document.getElementById("message").innerText =
- "Incorrect username or password.";
-
- }
-}
-
 
 function playGame() {
 
