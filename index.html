@@ -86,13 +86,22 @@
 
 <script>
 
-async function login() {
+const APPS_SCRIPT_URL =
+"https://script.google.com/a/macros/hendricks.k12.in.us/s/AKfycbyju-zC47qXL7hmgPYTmdBrSx6V5JnB6KAVAzUf5DjBhZ7-053x__EQeTDIXvurSSHu/exec";
 
-let username = document.getElementById("username").value;
-let password = document.getElementById("password").value;
+function login() {
 
-const message = document.getElementById("message");
-const playButton = document.getElementById("playButton");
+const username =
+document.getElementById("username").value.trim();
+
+const password =
+document.getElementById("password").value;
+
+const message =
+document.getElementById("message");
+
+const playButton =
+document.getElementById("playButton");
 
 if (!username || !password) {
 message.innerText = "Enter your username and password.";
@@ -102,9 +111,10 @@ return;
 message.innerText = "Logging in...";
 playButton.style.display = "none";
 
-const iframe = document.createElement("iframe");
+const frameName = "loginFrame_" + Date.now();
 
-iframe.name = "loginFrame";
+const iframe = document.createElement("iframe");
+iframe.name = frameName;
 iframe.style.display = "none";
 
 document.body.appendChild(iframe);
@@ -112,50 +122,78 @@ document.body.appendChild(iframe);
 const form = document.createElement("form");
 
 form.method = "POST";
-form.action = "https://script.google.com/a/macros/hendricks.k12.in.us/s/AKfycbyju-zC47qXL7hmgPYTmdBrSx6V5JnB6KAVAzUf5DjBhZ7-053x__EQeTDIXvurSSHu/exec";
-form.target = "loginFrame";
-
-const data = {
-action: "login",
-username: username,
-password: password
-};
+form.action = APPS_SCRIPT_URL;
+form.target = frameName;
+form.style.display = "none";
 
 const input = document.createElement("input");
 
 input.type = "hidden";
 input.name = "data";
-input.value = JSON.stringify(data);
+
+input.value = JSON.stringify({
+action: "login",
+username: username,
+password: password
+});
 
 form.appendChild(input);
 document.body.appendChild(form);
 
-window.addEventListener("message", function handleLogin(event) {
+let finished = false;
 
-const result = event.data;
+function handleMessage(event) {
 
-if (!result || typeof result.success !== "boolean") {
+if (finished) return;
+
+if (!event.data ||
+typeof event.data.success !== "boolean") {
 return;
 }
 
-message.innerText = result.message;
+finished = true;
 
-if (result.success) {
+message.innerText = event.data.message;
+
+if (event.data.success) {
 playButton.style.display = "inline-block";
 }
 
-window.removeEventListener("message", handleLogin);
+window.removeEventListener("message", handleMessage);
+
 form.remove();
 iframe.remove();
+}
 
-});
+window.addEventListener("message", handleMessage);
 
 form.submit();
+
+setTimeout(function() {
+
+if (!finished) {
+
+finished = true;
+
+message.innerText =
+"The account server did not respond.";
+
+window.removeEventListener(
+"message",
+handleMessage
+);
+
+form.remove();
+iframe.remove();
 }
+
+}, 10000);
+}
+
 
 function playGame() {
 
- // We'll connect Eaglercraft here later.
+// We will connect Eaglercraft here later.
 
 }
 
