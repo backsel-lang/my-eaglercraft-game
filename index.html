@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>My Eaglercraft Game</title>
+
+ <style>
+ body {
+ margin: 0;
+ background: #111;
+ color: white;
+ font-family: Arial, sans-serif;
+ text-align: center;
+ }
+
+ .screen {
+ width: 100%;
+ height: 100vh;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ }
+
+ .box {
+ background: #222;
+ padding: 40px;
+ border-radius: 15px;
+ width: 350px;
+ }
+
+ h1 {
+ font-size: 36px;
+ margin-bottom: 30px;
+ }
+
+ input {
+ width: 90%;
+ padding: 12px;
+ margin: 8px;
+ border-radius: 6px;
+ border: none;
+ }
+
+ button {
+ padding: 12px 25px;
+ margin: 8px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-size: 16px;
+ }
+
+ #playButton {
+ display: none;
+ }
+
+ #message {
+ margin-top: 15px;
+ }
+ </style>
+</head>
+
+<body>
+
+<div class="screen">
+ <div class="box">
+
+ <h1>MY GAME</h1>
+
+ <p> Welcome to my Eaglercraft server!</p>
+
+ <audio controls>
+ <source src="music.mp3" type="audio/mpeg">
+ </audio>
+
+ <h2>Account</h2>
+
+ <input id="username" type="text" placeholder="Username">
+
+ <input id="password" type="password" placeholder="Password">
+
+ <br>
+
+ <button onclick="createAccount()">Create Account</button>
+
+ <button onclick="login()">Log In</button>
+
+ <button id="playButton" onclick="playGame()">PLAY</button>
+
+ <p id="message"></p>
+
+ </div>
+</div>
+
+<script>
+
+function createAccount() {
+
+ let username = document.getElementById("username").value;
+ let password = document.getElementById("password").value;
+
+ if (username === "" || password === "") {
+ document.getElementById("message").innerText =
+ "Enter a username and password.";
+ return;
+ }
+
+ localStorage.setItem("username", username);
+ localStorage.setItem("password", password);
+
+ document.getElementById("message").innerText =
+ "Account created! You can now log in.";
+}
+
+
+function login() {
+
+ let username = document.getElementById("username").value;
+ let password = document.getElementById("password").value;
+
+ let savedUsername = localStorage.getItem("username");
+ let savedPassword = localStorage.getItem("password");
+
+ if (username === savedUsername && password === savedPassword) {
+
+ document.getElementById("message").innerText =
+ "Login successful!";
+
+ document.getElementById("playButton").style.display =
+ "inline-block";
+
+ } else {
+
+ document.getElementById("message").innerText =
+ "Incorrect username or password.";
+
+ }
+}
+
+
+function playGame() {
+
+ alert("Game loading...");
+
+ // We will connect your Eaglercraft file here later.
+
+}
+
+</script>
+
+</body>
+</html>
